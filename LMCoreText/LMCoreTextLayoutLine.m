@@ -1,10 +1,9 @@
 //
-//  DTCoreTextLayoutLine.m
-//  DTCoreText
+//  LMCoreTextLayoutLine.m
+//  LMAttributedStringHeight
 //
-//  Created by Oliver Drobnik on 1/24/11.
-//  Copyright 2011 Drobnik.com. All rights reserved.
-//
+//  Created by zhuo on 2017/3/22.
+//  Copyright © 2017年 zhuo. All rights reserved.
 
 #import "LMCoreTextLayoutLine.h"
 
