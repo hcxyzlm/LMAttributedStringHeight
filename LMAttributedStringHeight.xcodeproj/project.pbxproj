@@ -13,6 +13,8 @@
 		AEDF47801E8282BD00A1AC30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEDF477E1E8282BD00A1AC30 /* Main.storyboard */; };
 		AEDF47821E8282BD00A1AC30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AEDF47811E8282BD00A1AC30 /* Assets.xcassets */; };
 		AEDF47851E8282BD00A1AC30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEDF47831E8282BD00A1AC30 /* LaunchScreen.storyboard */; };
+		AEDF47911E8282CA00A1AC30 /* LMCoreTextFrameLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AEDF478E1E8282CA00A1AC30 /* LMCoreTextFrameLayout.m */; };
+		AEDF47921E8282CA00A1AC30 /* LMCoreTextLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = AEDF47901E8282CA00A1AC30 /* LMCoreTextLayoutLine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,10 @@
 		AEDF47811E8282BD00A1AC30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AEDF47841E8282BD00A1AC30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AEDF47861E8282BD00A1AC30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AEDF478D1E8282CA00A1AC30 /* LMCoreTextFrameLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMCoreTextFrameLayout.h; sourceTree = "<group>"; };
+		AEDF478E1E8282CA00A1AC30 /* LMCoreTextFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCoreTextFrameLayout.m; sourceTree = "<group>"; };
+		AEDF478F1E8282CA00A1AC30 /* LMCoreTextLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMCoreTextLayoutLine.h; sourceTree = "<group>"; };
+		AEDF47901E8282CA00A1AC30 /* LMCoreTextLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCoreTextLayoutLine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +48,7 @@
 		AEDF47691E8282BD00A1AC30 = {
 			isa = PBXGroup;
 			children = (
+				AEDF478C1E8282CA00A1AC30 /* LMCoreText */,
 				AEDF47741E8282BD00A1AC30 /* LMAttributedStringHeight */,
 				AEDF47731E8282BD00A1AC30 /* Products */,
 			);
@@ -77,6 +84,17 @@
 				AEDF47761E8282BD00A1AC30 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AEDF478C1E8282CA00A1AC30 /* LMCoreText */ = {
+			isa = PBXGroup;
+			children = (
+				AEDF478D1E8282CA00A1AC30 /* LMCoreTextFrameLayout.h */,
+				AEDF478E1E8282CA00A1AC30 /* LMCoreTextFrameLayout.m */,
+				AEDF478F1E8282CA00A1AC30 /* LMCoreTextLayoutLine.h */,
+				AEDF47901E8282CA00A1AC30 /* LMCoreTextLayoutLine.m */,
+			);
+			path = LMCoreText;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,7 +169,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AEDF477D1E8282BD00A1AC30 /* ViewController.m in Sources */,
+				AEDF47921E8282CA00A1AC30 /* LMCoreTextLayoutLine.m in Sources */,
 				AEDF477A1E8282BD00A1AC30 /* AppDelegate.m in Sources */,
+				AEDF47911E8282CA00A1AC30 /* LMCoreTextFrameLayout.m in Sources */,
 				AEDF47771E8282BD00A1AC30 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
