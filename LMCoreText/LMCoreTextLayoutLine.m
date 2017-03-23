@@ -7,6 +7,7 @@
 
 #import "LMCoreTextLayoutLine.h"
 #import "NSDictionary+LMCoreText.h"
+#import "LMCoreTextRun.h"
 
 @interface LMCoreTextLayoutLine ()
 
@@ -32,6 +33,10 @@
 	BOOL _writingDirectionIsRightToLeft;
 	BOOL _needsToDetectWritingDirection;
     
+    NSArray *_coretextRuns;  // runs
+    
+    BOOL _hasScannedGlyphRunsForValues;
+    
 }
 
 - (id)initWithLine:(CTLineRef)line
@@ -55,22 +60,49 @@
 		_needsToDetectWritingDirection = YES;
 				
 		_stringLocationOffset = stringLocationOffset;
+        _hasScannedGlyphRunsForValues = NO;
 	}
 	return self;
 }
 
 - (CGFloat)lineHeight
 {
+    if (!_hasScannedGlyphRunsForValues)
+    {
+        [self _scanGlyphRunsForValues];
+    }
     
     return _lineHeight;
 }
 
+- (void)_scanGlyphRunsForValues
+{
+    @synchronized(self)
+    {
+        CGFloat maxFontSize = 0;
+        
+        for (LMCoreTextRun *oneRun in self.glyphRuns)
+        {
+            CTFontRef usedFont = (__bridge CTFontRef)([oneRun.attributes objectForKey:(id)kCTFontAttributeName]);
+            if (usedFont)
+            {
+                
+                maxFontSize = MAX(maxFontSize, CTFontGetSize(usedFont));
+            }
+            
+        }
+        
+        _lineHeight = maxFontSize;
+        
+        _hasScannedGlyphRunsForValues= YES;
+    }
+}
+
 - (void)dealloc
 {
-//    if (_line) {
-//        CFRelease(_line);
-//        _line = nil;
-//    }
+    if (_line) {
+        CFRelease(_line);
+    }
 	
 }
 
@@ -156,25 +188,10 @@
 
 - (NSParagraphStyle *)paragraphStyle
 {
-    // get paragraph style from any glyph
     
-    if (!_paragraphStyle) {
-        NSDictionary *attributes = nil;
-        @synchronized(self)
-        {
-            
-            CFArrayRef runs = CTLineGetGlyphRuns(_line);
-            CFIndex runCount = CFArrayGetCount(runs);
-            if (runCount > 0) {
-                CTRunRef oneRun = CFArrayGetValueAtIndex(runs, runCount-1);
-                
-                attributes =  (__bridge_transfer  NSDictionary*)CTRunGetAttributes(oneRun);
-            }
-            _paragraphStyle = [attributes paragraphStyle];
-        }
-    }
+    NSDictionary *attributedDict = ((LMCoreTextRun*)[_coretextRuns lastObject]).attributes;
     
-    return _paragraphStyle;
+    return [attributedDict paragraphStyle];
 }
 
 - (CGFloat)descent
@@ -220,6 +237,61 @@
     return NSMakeRange(rag.location, rag.length);
 }
 
+#pragma mark - Properties
+- (NSArray *)glyphRuns
+{
+    @synchronized(self)
+    {
+        if (!_coretextRuns)
+        {
+            // run array is owned by line
+            CFArrayRef runs = CTLineGetGlyphRuns(_line);
+            CFIndex runCount = CFArrayGetCount(runs);
+            
+            if (runCount)
+            {
+                NSMutableArray *tmpArray = [[NSMutableArray alloc] initWithCapacity:runCount];
+                
+                for (CFIndex i=0; i<runCount; i++)
+                {
+                    CTRunRef oneRun = CFArrayGetValueAtIndex(runs, i);
+                    
+                    CGPoint *positions = (CGPoint*)CTRunGetPositionsPtr(oneRun);
+                    
+                    BOOL shouldFreePositions = NO;
+                    
+                    if (positions == NULL) // Ptr gave NULL, we'll need to copy positions array and later free it
+                    {
+                        CFIndex glyphCount = CTRunGetGlyphCount(oneRun);
+                        
+                        shouldFreePositions = YES;
+                        
+                        size_t positionsBufferSize = sizeof(CGPoint) * glyphCount;
+                        CGPoint *positionsBuffer = malloc(positionsBufferSize);
+                        CTRunGetPositions(oneRun, CFRangeMake(0, 0), positionsBuffer);
+                        positions = positionsBuffer;
+                    }
+                    
+                    // assumption: position of first glyph is also the correct offset of the entire run
+                    CGPoint position = positions[0];
+                    
+                    LMCoreTextRun *runs = [[LMCoreTextRun alloc] initWithRun:oneRun  offset:position.x];
+                    [tmpArray addObject:runs];
+                    
+                    if ( shouldFreePositions )
+                    {
+                        free(positions);
+                    }
+                }
+                
+                _coretextRuns = tmpArray;
+            }
+        }
+        
+        return _coretextRuns;
+    }
+}
+
 @synthesize frame =_frame;
 
 @synthesize ascent = _ascent;
@@ -227,5 +299,6 @@
 
 @synthesize paragraphStyle = _paragraphStyle;
 @synthesize baselineOrigin = _baselineOrigin;
+
 
 @end

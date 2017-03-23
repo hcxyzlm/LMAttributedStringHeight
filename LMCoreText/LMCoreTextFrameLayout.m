@@ -696,6 +696,7 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 		// determine position of line based on line before it
 		
 		CGPoint newLineBaselineOrigin = [self _algorithmWebKit_BaselineOriginToPositionLine:newLine afterLine:previousLine];
+        NSLog(@"newLineBaselineOrigin (%f, %f)", newLineBaselineOrigin.x, newLineBaselineOrigin.y);
 		newLineBaselineOrigin.x = lineOriginX;
 		newLine.baselineOrigin = newLineBaselineOrigin;
 		
