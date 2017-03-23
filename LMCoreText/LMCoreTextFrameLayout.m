@@ -574,7 +574,7 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 			textAlignment = kCTTextAlignmentNatural;
 #else
-			textAlignment = kCTNaturalTextAlignment;
+			textAlignment = kCTTextAlignmentNatural;
 #endif
 		}
 		
@@ -597,7 +597,7 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 			case kCTTextAlignmentLeft:
 #else
-			case kCTLeftTextAlignment:
+			case kCTTextAlignmentLeft:
 #endif
 			{
 				lineOriginX = _frame.origin.x + offset;
@@ -608,7 +608,7 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 			case kCTTextAlignmentNatural:
 #else
-			case kCTNaturalTextAlignment:
+			case kCTTextAlignmentNatural:
 #endif
 			{
 				lineOriginX = _frame.origin.x + offset;
@@ -624,7 +624,7 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 			case kCTTextAlignmentRight:
 #else
-			case kCTRightTextAlignment:
+			case kCTTextAlignmentRight:
 #endif
 			{
 				lineOriginX = _frame.origin.x + offset + (CGFloat)CTLineGetPenOffsetForFlush(line, 1.0, availableSpace);
@@ -635,7 +635,7 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 			case kCTTextAlignmentCenter:
 #else
-			case kCTCenterTextAlignment:
+			case kCTTextAlignmentCenter:
 #endif
 			{
 				lineOriginX = _frame.origin.x + offset + (CGFloat)CTLineGetPenOffsetForFlush(line, 0.5, availableSpace);
@@ -646,7 +646,7 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 			case kCTTextAlignmentJustified:
 #else
-			case kCTJustifiedTextAlignment:
+			case kCTTextAlignmentJustified:
 #endif
 			{
 				BOOL isAtEndOfParagraph  = (currentParagraphRange.location+currentParagraphRange.length <= lineRange.location+lineRange.length ||
