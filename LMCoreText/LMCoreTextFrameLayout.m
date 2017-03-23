@@ -198,55 +198,82 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 // determines the "half leading"
 - (CGFloat)_algorithmWebKit_halfLeadingOfLine:(LMCoreTextLayoutLine *)line
 {
+    CGFloat maxFontSize = [line lineHeight];
     
-    NSDictionary *attartDict = [self.attributedStringFragment attributesAtIndex:0 effectiveRange:NULL];
-    CGFloat maxFontSize = 14;
-	// subtract inline box height
-    if ([attartDict objectForKey:NSFontAttributeName]) {
-        UIFont *font = [attartDict objectForKey:NSFontAttributeName];
-        if (font) {
-            maxFontSize = font.pointSize;
-        }
+    NSParagraphStyle *paragraphStyle = [line paragraphStyle];
+    
+    if (paragraphStyle.minimumLineHeight != 0 && paragraphStyle.minimumLineHeight > maxFontSize)
+    {
+        maxFontSize = paragraphStyle.minimumLineHeight;
     }
-	CGFloat inlineBoxHeight = line.ascent + line.descent;
-	
-	return (maxFontSize*1.1f- inlineBoxHeight)/2.0f;
+    
+    if (paragraphStyle.maximumLineHeight != 0 && paragraphStyle.maximumLineHeight < maxFontSize)
+    {
+        maxFontSize = paragraphStyle.maximumLineHeight;
+    }
+    
+    CGFloat leading;
+    
+    if (paragraphStyle.lineHeightMultiple > 0)
+    {
+        leading = maxFontSize * paragraphStyle.lineHeightMultiple;
+    }
+    else
+    {
+        // reasonable "normal"
+        leading = maxFontSize * 1.1f;
+    }
+    
+    // subtract inline box height
+    CGFloat inlineBoxHeight = line.ascent + line.descent;
+    
+    return (leading - inlineBoxHeight)/2.0f;
 }
-
 
 - (CGPoint)_algorithmWebKit_BaselineOriginToPositionLine:(LMCoreTextLayoutLine *)line afterLine:(LMCoreTextLayoutLine *)previousLine
 {
-	CGPoint baselineOrigin = previousLine.baselineOrigin;
-	
-	if (previousLine)
-	{
-		baselineOrigin.y = CGRectGetMaxY(previousLine.frame);
-		
-		CGFloat halfLeadingFromText = [self _algorithmWebKit_halfLeadingOfLine:previousLine];
-			baselineOrigin.y += halfLeadingFromText;
-
+    CGPoint baselineOrigin = previousLine.baselineOrigin;
+    
+    if (previousLine)
+    {
+        baselineOrigin.y = CGRectGetMaxY(previousLine.frame);
+        
+        CGFloat halfLeadingFromText = [self _algorithmWebKit_halfLeadingOfLine:previousLine];
+        
+        
+        baselineOrigin.y += halfLeadingFromText;
+        
+        // add previous line's after paragraph spacing
         if ([self isLineLastInParagraph:previousLine])
         {
-            baselineOrigin.y += 3;
+            NSParagraphStyle *paragraphStyle = [previousLine paragraphStyle];
+            baselineOrigin.y += paragraphStyle.paragraphSpacing;
         }
-	}
-	else
-	{
-		// first line in frame
-		baselineOrigin = _frame.origin;
-        baselineOrigin.y += 3;
-	}
-	
-	baselineOrigin.y += line.ascent;
-	
-	CGFloat halfLeadingFromText = [self _algorithmWebKit_halfLeadingOfLine:line];
-	
-	
+    }
+    else
+    {
+        // first line in frame
+        baselineOrigin = _frame.origin;
+    }
+    
+    baselineOrigin.y += line.ascent;
+    
+    CGFloat halfLeadingFromText = [self _algorithmWebKit_halfLeadingOfLine:line];
+    
     baselineOrigin.y += halfLeadingFromText;
-	// origins are rounded
-	baselineOrigin.y = ceil(baselineOrigin.y);
-	
-	return baselineOrigin;
+    
+    NSParagraphStyle *paragraphStyle = [line paragraphStyle];
+    
+    // add current line's before paragraph spacing
+    if ([self isLineFirstInParagraph:line])
+    {
+        baselineOrigin.y += paragraphStyle.paragraphSpacingBefore;
+    }
+    
+    // origins are rounded
+    baselineOrigin.y = ceil(baselineOrigin.y);
+    
+    return baselineOrigin;
 }
 
 // returns YES if the given line is the last in a paragraph
@@ -261,6 +288,23 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
     
     return NO;
 }
+
+// returns YES if the given line is the first in a paragraph
+- (BOOL)isLineFirstInParagraph:(LMCoreTextLayoutLine *)line
+{
+    NSRange lineRange = line.stringRange;
+    
+    if (lineRange.location == 0)
+    {
+        return YES;
+    }
+    
+    NSInteger prevLineLastUnicharIndex =lineRange.location - 1;
+    unichar prevLineLastUnichar = [[_attributedStringFragment string] characterAtIndex:prevLineLastUnicharIndex];
+    
+    return [[NSCharacterSet newlineCharacterSet] characterIsMember:prevLineLastUnichar];
+}
+
 - (LMCoreTextLayoutLine *)lineContainingIndex:(NSUInteger)index {
     
     if (index <= self.lines.count -1) {
@@ -709,8 +753,6 @@ CFIndex getTruncationWithIndex(CTLineRef line, CTLineRef trunc)
 	
 	// note: building line by line with typesetter
 	[self _buildLinesWithTypesetter];
-	
-	//[self _buildLinesWithStandardFramesetter];
 }
 
 - (NSArray *)lines

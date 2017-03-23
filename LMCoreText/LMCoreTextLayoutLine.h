@@ -55,4 +55,7 @@
  */
 @property (nonatomic, assign) BOOL writingDirectionIsRightToLeft;
 
+/** 注释*/
+@property (nonatomic, readonly) NSParagraphStyle *paragraphStyle;
+
 @end

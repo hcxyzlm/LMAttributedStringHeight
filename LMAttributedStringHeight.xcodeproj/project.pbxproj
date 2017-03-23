@@ -15,6 +15,7 @@
 		AEDF47851E8282BD00A1AC30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEDF47831E8282BD00A1AC30 /* LaunchScreen.storyboard */; };
 		AEDF47911E8282CA00A1AC30 /* LMCoreTextFrameLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AEDF478E1E8282CA00A1AC30 /* LMCoreTextFrameLayout.m */; };
 		AEDF47921E8282CA00A1AC30 /* LMCoreTextLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = AEDF47901E8282CA00A1AC30 /* LMCoreTextLayoutLine.m */; };
+		AEEC47151E837CAD00F15316 /* NSDictionary+LMCoreText.m in Sources */ = {isa = PBXBuildFile; fileRef = AEEC47141E837CAD00F15316 /* NSDictionary+LMCoreText.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		AEDF478E1E8282CA00A1AC30 /* LMCoreTextFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCoreTextFrameLayout.m; sourceTree = "<group>"; };
 		AEDF478F1E8282CA00A1AC30 /* LMCoreTextLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMCoreTextLayoutLine.h; sourceTree = "<group>"; };
 		AEDF47901E8282CA00A1AC30 /* LMCoreTextLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCoreTextLayoutLine.m; sourceTree = "<group>"; };
+		AEEC47131E837CAD00F15316 /* NSDictionary+LMCoreText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+LMCoreText.h"; sourceTree = "<group>"; };
+		AEEC47141E837CAD00F15316 /* NSDictionary+LMCoreText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LMCoreText.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +96,8 @@
 				AEDF478E1E8282CA00A1AC30 /* LMCoreTextFrameLayout.m */,
 				AEDF478F1E8282CA00A1AC30 /* LMCoreTextLayoutLine.h */,
 				AEDF47901E8282CA00A1AC30 /* LMCoreTextLayoutLine.m */,
+				AEEC47131E837CAD00F15316 /* NSDictionary+LMCoreText.h */,
+				AEEC47141E837CAD00F15316 /* NSDictionary+LMCoreText.m */,
 			);
 			path = LMCoreText;
 			sourceTree = "<group>";
@@ -172,6 +177,7 @@
 				AEDF47921E8282CA00A1AC30 /* LMCoreTextLayoutLine.m in Sources */,
 				AEDF477A1E8282BD00A1AC30 /* AppDelegate.m in Sources */,
 				AEDF47911E8282CA00A1AC30 /* LMCoreTextFrameLayout.m in Sources */,
+				AEEC47151E837CAD00F15316 /* NSDictionary+LMCoreText.m in Sources */,
 				AEDF47771E8282BD00A1AC30 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,6 +335,7 @@
 				AEDF478B1E8282BD00A1AC30 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

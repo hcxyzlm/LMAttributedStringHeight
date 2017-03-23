@@ -67,7 +67,7 @@
     
     self.attributedLab.attributedText = str;
     
-    self.attributedLab.frame = CGRectMake(0, 50, self.view.frame.size.width, coreTextLayoutFrame.frame.size.height);
+    self.attributedLab.frame = CGRectMake(0, 50, self.view.frame.size.width, CGRectGetHeight(coreTextLayoutFrame.frame));
     
     
 }

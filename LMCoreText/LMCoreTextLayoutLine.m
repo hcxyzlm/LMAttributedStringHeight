@@ -6,8 +6,11 @@
 //  Copyright © 2017年 zhuo. All rights reserved.
 
 #import "LMCoreTextLayoutLine.h"
+#import "NSDictionary+LMCoreText.h"
 
 @interface LMCoreTextLayoutLine ()
+
+@property (nonatomic, strong, readwrite) NSParagraphStyle *paragraphStyle;
 @end
 
 @implementation LMCoreTextLayoutLine
@@ -28,6 +31,7 @@
 	
 	BOOL _writingDirectionIsRightToLeft;
 	BOOL _needsToDetectWritingDirection;
+    
 }
 
 - (id)initWithLine:(CTLineRef)line
@@ -63,7 +67,11 @@
 
 - (void)dealloc
 {
-	CFRelease(_line);
+//    if (_line) {
+//        CFRelease(_line);
+//        _line = nil;
+//    }
+	
 }
 
 #ifndef COVERAGE
@@ -146,6 +154,28 @@
 	_ascent = ascent;
 }
 
+- (NSParagraphStyle *)paragraphStyle
+{
+    // get paragraph style from any glyph
+    
+    if (!_paragraphStyle) {
+        NSDictionary *attributes = nil;
+        @synchronized(self)
+        {
+            
+            CFArrayRef runs = CTLineGetGlyphRuns(_line);
+            CFIndex runCount = CFArrayGetCount(runs);
+            if (runCount > 0) {
+                CTRunRef oneRun = CFArrayGetValueAtIndex(runs, runCount-1);
+                
+                attributes =  (__bridge_transfer  NSDictionary*)CTRunGetAttributes(oneRun);
+            }
+            _paragraphStyle = [attributes paragraphStyle];
+        }
+    }
+    
+    return _paragraphStyle;
+}
 
 - (CGFloat)descent
 {
@@ -195,6 +225,7 @@
 @synthesize ascent = _ascent;
 @synthesize descent = _descent;
 
+@synthesize paragraphStyle = _paragraphStyle;
 @synthesize baselineOrigin = _baselineOrigin;
 
 @end
